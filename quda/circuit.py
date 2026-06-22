@@ -249,9 +249,10 @@ class Circuit:
         Returns:
             Measurement results from the backend
         """
+        from .decorators import get_active_backend
         from .hal import route
 
-        backend = self._backend or "simulator"
+        backend = self._backend or get_active_backend()
         return route(backend, program)
 
     def _execute_single(self, state: State):
@@ -265,8 +266,9 @@ class Circuit:
         Returns:
             int: 0 or 1
         """
+        from .decorators import get_active_backend
         from .hal import route_single
-        backend = self._backend or "simulator"
+        backend = self._backend or get_active_backend()
         return route_single(backend, state, self._compile())
 
     # ── Inspection ────────────────────────────────────────────────────────

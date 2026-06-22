@@ -200,9 +200,190 @@ for r in ghz_results:
 print("  ✓ PASS — GHZ State confirmed. All States correlated.")
 print()
 
+# ── Test 11: Google Cirq — Bell State ─────────────────────
+print("TEST 11: Google Cirq — Bell State (20 runs)")
+print("  Result must be (0,0) or (1,1) — never (0,1) or (1,0)")
+print()
+
+@quda.target(hardware='google')
+def google_bell_state():
+    circuit = quda.Circuit(name="google_bell")
+    field = circuit.field(size=2)
+    field[0].superpose()
+    field[0].entangle(field[1])
+    return circuit.measure()
+
+google_bell_results = set()
+for i in range(20):
+    result = google_bell_state()
+    google_bell_results.add(result)
+
+print(f"  Outcomes observed over 20 runs: {google_bell_results}")
+assert (0, 0) in google_bell_results or (1, 1) in google_bell_results
+assert (0, 1) not in google_bell_results, "Unexpected (0,1) — entanglement violated"
+assert (1, 0) not in google_bell_results, "Unexpected (1,0) — entanglement violated"
+print("  ✓ PASS — Google Cirq Bell state confirmed.")
+print()
+
+# ── Test 12: Google Cirq — Multi-Shot Bell State ──────────
+print("TEST 12: Google Cirq — Multi-Shot Bell State (512 shots)")
+print()
+
+@quda.target(hardware='google')
+def google_bell_multishot():
+    circuit = quda.Circuit(name="google_bell_multishot")
+    field = circuit.field(size=2)
+    field[0].superpose()
+    field[0].entangle(field[1])
+    return circuit.shots(512).measure()
+
+google_distribution = google_bell_multishot()
+print(f"  Distribution: {google_distribution}")
+total = sum(google_distribution.values())
+for outcome, count in sorted(google_distribution.items()):
+    print(f"    {outcome}: {count} ({count/total*100:.1f}%)")
+
+assert (0, 0) in google_distribution or (1, 1) in google_distribution
+print("  ✓ PASS — Google Cirq multi-shot distribution confirmed.")
+print()
+
+# ── Test 13: Google Cirq — GHZ State ──────────────────────
+print("TEST 13: Google Cirq — GHZ State (4 States)")
+print()
+
+@quda.target(hardware='google')
+def google_ghz_state():
+    circuit = quda.Circuit(name="google_ghz")
+    field = circuit.field(size=4)
+    field[0].superpose()
+    field.entangle_all()
+    return circuit.measure()
+
+google_ghz_results = set()
+for _ in range(20):
+    r = google_ghz_state()
+    google_ghz_results.add(r)
+
+print(f"  GHZ outcomes over 20 runs: {google_ghz_results}")
+for r in google_ghz_results:
+    assert len(set(r)) == 1, f"GHZ violated — mixed outcome: {r}"
+print("  ✓ PASS — Google Cirq GHZ state confirmed.")
+print()
+
+# ── Test 14: Google Cirq — Full Stack Decorators ──────────
+print("TEST 14: Google Cirq — Full Stack (All Three Decorators)")
+print()
+
+@quda.secure(enclave=True)
+@quda.target(hardware='google')
+@quda.telemetry(panoptic=True)
+def google_full_stack_bell():
+    circuit = quda.Circuit(name="google_full_stack")
+    field = circuit.field(size=2)
+    field[0].superpose()
+    field[0].entangle(field[1])
+    return circuit.measure()
+
+google_full_result = google_full_stack_bell()
+print(f"  Result: {google_full_result}")
+assert google_full_result in [(0, 0), (1, 1)]
+print("  ✓ PASS — Google Cirq full stack execution successful.")
+print()
+
+# ── Test 15: IonQ — Bell State ────────────────────────────
+print("TEST 15: IonQ — Bell State (20 runs)")
+print("  Result must be (0,0) or (1,1) — never (0,1) or (1,0)")
+print()
+
+@quda.target(hardware='ionq')
+def ionq_bell_state():
+    circuit = quda.Circuit(name="ionq_bell")
+    field = circuit.field(size=2)
+    field[0].superpose()
+    field[0].entangle(field[1])
+    return circuit.measure()
+
+ionq_bell_results = set()
+for i in range(20):
+    result = ionq_bell_state()
+    ionq_bell_results.add(result)
+
+print(f"  Outcomes observed over 20 runs: {ionq_bell_results}")
+assert (0, 0) in ionq_bell_results or (1, 1) in ionq_bell_results
+assert (0, 1) not in ionq_bell_results, "Unexpected (0,1) — entanglement violated"
+assert (1, 0) not in ionq_bell_results, "Unexpected (1,0) — entanglement violated"
+print("  ✓ PASS — IonQ Bell state confirmed.")
+print()
+
+# ── Test 16: IonQ — Multi-Shot Bell State ─────────────────
+print("TEST 16: IonQ — Multi-Shot Bell State (512 shots)")
+print()
+
+@quda.target(hardware='ionq')
+def ionq_bell_multishot():
+    circuit = quda.Circuit(name="ionq_bell_multishot")
+    field = circuit.field(size=2)
+    field[0].superpose()
+    field[0].entangle(field[1])
+    return circuit.shots(512).measure()
+
+ionq_distribution = ionq_bell_multishot()
+print(f"  Distribution: {ionq_distribution}")
+total = sum(ionq_distribution.values())
+for outcome, count in sorted(ionq_distribution.items()):
+    print(f"    {outcome}: {count} ({count/total*100:.1f}%)")
+
+assert (0, 0) in ionq_distribution or (1, 1) in ionq_distribution
+print("  ✓ PASS — IonQ multi-shot distribution confirmed.")
+print()
+
+# ── Test 17: IonQ — GHZ State ─────────────────────────────
+print("TEST 17: IonQ — GHZ State (4 States)")
+print()
+
+@quda.target(hardware='ionq')
+def ionq_ghz_state():
+    circuit = quda.Circuit(name="ionq_ghz")
+    field = circuit.field(size=4)
+    field[0].superpose()
+    field.entangle_all()
+    return circuit.measure()
+
+ionq_ghz_results = set()
+for _ in range(20):
+    r = ionq_ghz_state()
+    ionq_ghz_results.add(r)
+
+print(f"  GHZ outcomes over 20 runs: {ionq_ghz_results}")
+for r in ionq_ghz_results:
+    assert len(set(r)) == 1, f"GHZ violated — mixed outcome: {r}"
+print("  ✓ PASS — IonQ GHZ state confirmed.")
+print()
+
+# ── Test 18: IonQ — Full Stack Decorators ─────────────────
+print("TEST 18: IonQ — Full Stack (All Three Decorators)")
+print()
+
+@quda.secure(enclave=True)
+@quda.target(hardware='ionq')
+@quda.telemetry(panoptic=True)
+def ionq_full_stack_bell():
+    circuit = quda.Circuit(name="ionq_full_stack")
+    field = circuit.field(size=2)
+    field[0].superpose()
+    field[0].entangle(field[1])
+    return circuit.measure()
+
+ionq_full_result = ionq_full_stack_bell()
+print(f"  Result: {ionq_full_result}")
+assert ionq_full_result in [(0, 0), (1, 1)]
+print("  ✓ PASS — IonQ full stack execution successful.")
+print()
+
 # ── Summary ───────────────────────────────────────────────
 print("=" * 55)
 print("  ALL TESTS PASSED")
 print(f"  QUDA v{quda.version()} — Core SDK operational.")
-print("  Ready for IBM backend integration.")
+print(f"  Backends: {quda.backends()}")
+print("  Ready for IBM, Google, and IonQ backend integration.")
 print("=" * 55)

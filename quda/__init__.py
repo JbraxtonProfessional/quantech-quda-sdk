@@ -33,8 +33,8 @@ Decorators:
     @target   — Hardware backend routing
     @telemetry — Panoptic intelligence integration
 
-Version: 0.1.0
-Company: Quantech Inc.
+Version: 0.1.1
+Company: Quantech
 """
 
 from .circuit    import Circuit, QUDACircuitError
@@ -43,8 +43,8 @@ from .state      import State, StateStatus, QUDAStateError
 from .decorators import secure, target, telemetry, get_active_backend
 from .hal        import available_backends, QUDAHALError
 
-__version__ = "0.1.0"
-__author__  = "Quantech Inc."
+__version__ = "0.1.1"
+__author__  = "Quantech"
 __all__ = [
     # Core
     "Circuit",

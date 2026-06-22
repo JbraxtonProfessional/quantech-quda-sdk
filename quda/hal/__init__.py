@@ -16,6 +16,18 @@ try:
 except ImportError:
     pass
 
+try:
+    from .google import GoogleBackend
+    _BACKENDS["google"] = GoogleBackend
+except ImportError:
+    pass
+
+try:
+    from .ionq import IonQBackend
+    _BACKENDS["ionq"] = IonQBackend
+except ImportError:
+    pass
+
 
 def route(backend_name: str, program: dict):
     backend = _resolve(backend_name)

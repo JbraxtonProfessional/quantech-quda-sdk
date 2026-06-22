@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "quda-sdk"
+version = "0.1.1"
+description = "Quantum Unified Device Architecture — the universal quantum programming SDK"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.9"
+authors = [
+    { name = "Quantech" },
+]
+maintainers = [
+    { name = "Quantech" },
+]
+keywords = [
+    "quantum",
+    "quantum-computing",
+    "quda",
+    "sdk",
+    "enclave",
+    "post-quantum",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = []
+
+[project.optional-dependencies]
+ibm = [
+    "qiskit",
+    "qiskit-ibm-runtime",
+]
+google = [
+    "cirq",
+]
+ionq = [
+    "cirq-ionq",
+    "requests",
+]
+all = [
+    "qiskit",
+    "qiskit-ibm-runtime",
+    "cirq",
+    "cirq-ionq",
+    "requests",
+]
+
+[project.urls]
+Homepage = "https://quantech.dev"
+
+[tool.hatch.build.targets.wheel]
+packages = ["quda"]
