@@ -4,6 +4,8 @@
 
 *Just as CUDA defined the GPU era, QUDA defines the quantum era.*
 
+> **v0.1 alpha** — Core SDK and simulator backends are fully operational. `@quda.secure` and `@quda.telemetry` are integration stubs; live Enclave encryption and Panoptic telemetry ship in v0.3.
+
 ---
 
 ## What is QUDA?
@@ -52,7 +54,7 @@ pip install quda-sdk[all]      # All backends
 |---------|----------|-------------|
 | `simulator` | QUDA native statevector | None |
 | `ibm` | IBM Quantum / Aer | Optional — `QUDA_IBM_TOKEN` |
-| `google` | Google Cirq / Quantum AI | Optional — `QUDA_GOOGLE_PROJECT_ID` |
+| `google` | Google Cirq / Quantum AI | Optional — `QUDA_GOOGLE_PROJECT_ID`, `QUDA_GOOGLE_PROCESSOR_ID` |
 | `ionq` | IonQ trapped ion | Optional — `QUDA_IONQ_API_KEY` |
 
 Route execution with a single decorator:
@@ -124,9 +126,11 @@ result = full_stack_bell()
 
 | Decorator | Purpose |
 |-----------|---------|
-| `@quda.secure` | Enclave post-quantum encryption for inputs, outputs, and execution metadata |
+| `@quda.secure` | Enclave post-quantum encryption for inputs, outputs, and execution metadata *(stub in v0.1)* |
 | `@quda.target` | Hardware backend routing via the HAL |
-| `@quda.telemetry` | Panoptic intelligence — metrics, circuit structure, outcome distributions |
+| `@quda.telemetry` | Panoptic intelligence — metrics, circuit structure, outcome distributions *(stub in v0.1)* |
+
+> `@quda.secure` and `@quda.telemetry` run without error in v0.1 but do not yet connect to live Enclave or Panoptic services.
 
 ## The Ecosystem
 
